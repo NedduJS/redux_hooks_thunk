@@ -1,3 +1,6 @@
 const LOGIN = 'LOGIN';
+const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+const LOGIN_ERROR = 'LOGIN_ERROR';
+const LOG_OUT = 'LOG_OUT';
 
-export { LOGIN };
+export { LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, LOG_OUT };

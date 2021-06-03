@@ -1,46 +1,45 @@
-import React, { useState, useEffect } from 'react'
-import Card from '../card/Card'
-import styles from './home.module.css'
-import axios from 'axios'
+import React from 'react';
+import { connect } from 'react-redux';
 
-let URL = "https://rickandmortyapi.com/api"
+import Card from '../card/Card';
+import {
+  removeCharacterAction,
+  addToFavoriteAction,
+} from '../../redux/chars/charsAction';
 
-export default function Home() {
+import styles from './home.module.css';
 
-    let [chars, setChars] = useState([])
+function Home({ chars, removeCharacterAction, addToFavoriteAction }) {
+  function renderCharacter() {
+    const char = chars[0];
+    return <Card leftClick={nextCharacter} rightClick={addFav} {...char} />;
+  }
 
-    useEffect(() => {
-        getCharacters()
-    }, [])
+  const nextCharacter = () => {
+    removeCharacterAction();
+  };
 
-    function nextChar() {
-        chars.shift()
-        if (!chars.length) {
-            //get more characters
-        }
-        setChars([...chars])
-    }
+  const addFav = () => {
+    addToFavoriteAction();
+  };
 
-    function renderCharacter() {
-        let char = chars[0]
-        return (
-            <Card leftClick={nextChar} {...char} />
-        )
-    }
-
-    function getCharacters() {
-        return axios.get(`${URL}/character`)
-            .then(res => {
-                setChars(res.data.results)
-            })
-    }
-
-    return (
-        <div className={styles.container}>
-            <h2>Personajes de Rick y Morty</h2>
-            <div>
-                {renderCharacter()}
-            </div>
-        </div>
-    )
+  return (
+    <div className={styles.container}>
+      <h2>Personajes de Rick y Morty</h2>
+      <div>{renderCharacter()}</div>
+    </div>
+  );
 }
+
+const mapStateToProps = (state) => {
+  return {
+    chars: state.characters.array,
+  };
+};
+
+const mapDispatchToProps = {
+  removeCharacterAction,
+  addToFavoriteAction,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
